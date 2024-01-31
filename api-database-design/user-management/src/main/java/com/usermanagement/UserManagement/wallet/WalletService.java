@@ -3,9 +3,11 @@ package com.usermanagement.UserManagement.wallet;
 import com.usermanagement.UserManagement.exception.DataExistException;
 import com.usermanagement.UserManagement.exception.InternalServiceException;
 import com.usermanagement.UserManagement.exception.NotFoundException;
+import com.usermanagement.UserManagement.mail.MailService;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,6 +22,12 @@ public class WalletService {
                    new Wallet(2,"wallet2", "wallet2@gmail.com")
             )
     );
+
+    private final MailService mailService;
+
+    public WalletService(@Qualifier("googleMail") MailService mailService) {
+        this.mailService = mailService;
+    }
 
     public List<Wallet> getWallets() {
         // try {
@@ -42,6 +50,7 @@ public class WalletService {
         }
         Wallet wallet = new Wallet(nextWalletId, request.walletName(), request.email());
         wallets.add(wallet);
+        mailService.sendEmail("admin@google.com","wallet created");
         return wallet;
     }
 
