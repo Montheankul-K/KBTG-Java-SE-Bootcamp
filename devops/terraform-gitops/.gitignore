@@ -25,3 +25,6 @@ terraform.rc
 
 # ignore key.pem
 key.pem
+
+# credential
+*credential.tf
